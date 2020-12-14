@@ -1,5 +1,13 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+)
+
 type sumPair struct {
 	valA int
 	valB int
@@ -10,37 +18,37 @@ func (s *sumPair) sum() int {
 }
 
 func main() {
-	inFile, err := ioutil.ReadFile("../input")
-	//numMap := make(map[int][]*sumPair)
+	inFile, err := os.Open("../input")
 
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	numList := []int{}
 
-	//scanner := bufio.NewScanner(inFile)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	//for scanner.Scan() {
-	//	s := scanner.Text()
-	//	val, _ := strconv.Atoi(s)
-	//	key, _ := strconv.Atoi(s[len(s)-1:])
+	defer inFile.Close()
 
-	//numMap[10-key] = append(numMap[10-key], val)
+	scanner := bufio.NewScanner(inFile)
 
-	//}
+	for scanner.Scan() {
+		s := scanner.Text()
+		val, _ := strconv.Atoi(s)
 
-	//if err := scanner.Err(); err != nil {
-	//	log.Fatal(err)
-	//}
+		numList = append(numList, val)
+	}
 
-	//for key, sumList := range numMap {
-	//if key >= 5 {
-	//for _, valI := range sumList {
-	//for _, valJ := range numMap[10-key] {
-	//if valI+valJ == 2020 {
-	//	fmt.Println(valI * valJ)
-	//}
-	//			}
-	//		}
-	//	}
-	//}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	for _, i := range numList {
+		for _, j := range numList {
+			for _, k := range numList {
+				if i+j+k == 2020 {
+					fmt.Println(i, j, k)
+					fmt.Println(i * j * k)
+				}
+			}
+		}
+	}
 }

@@ -5,20 +5,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strconv"
 	"strings"
 
 	"github.com/go-playground/validator"
 )
 
 type passport struct {
-	Byr string `json:"byr" validate:"required,byr"`
-	Iyr string `json:"iyr" validate:"required,iyr"`
-	Eyr string `json:"eyr" validate:"required,eyr"`
-	Hgt string `json:"hgt" validate:"required,hgt"`
-	Hcl string `json:"hcl" validate:"required,hexcolor"`
-	Ecl string `json:"ecl" validate:"required,oneof=amb blu brn gry grn hzl oth"`
-	Pid string `json:"pid" validate:"required,pid"`
+	Byr string `json:"byr" validate:"required"`
+	Iyr string `json:"iyr" validate:"required"`
+	Eyr string `json:"eyr" validate:"required"`
+	Hgt string `json:"hgt" validate:"required"`
+	Hcl string `json:"hcl" validate:"required"`
+	Ecl string `json:"ecl" validate:"required"`
+	Pid string `json:"pid" validate:"required"`
 	Cid string `json:"cid"`
 }
 
@@ -29,30 +28,6 @@ func main() {
 	}
 
 	v := validator.New()
-	_ = v.RegisterValidation("byr", func(fl validator.FieldLevel) bool {
-		i, _ := strconv.Atoi(fl.Field().String())
-		return (i >= 1920) && (i <= 2002)
-	})
-	_ = v.RegisterValidation("iyr", func(fl validator.FieldLevel) bool {
-		i, _ := strconv.Atoi(fl.Field().String())
-		return (i >= 2010) && (i <= 2020)
-	})
-	_ = v.RegisterValidation("eyr", func(fl validator.FieldLevel) bool {
-		i, _ := strconv.Atoi(fl.Field().String())
-		return (i >= 2020) && (i <= 2030)
-	})
-	_ = v.RegisterValidation("hgt", func(fl validator.FieldLevel) bool {
-		metric := fl.Field().String()[len(fl.Field().String())-2:]
-		if metric == "in" {
-
-		} else if metric == "cm" {
-
-		}
-		return false
-	})
-	_ = v.RegisterValidation("pid", func(fl validator.FieldLevel) bool {
-		return true
-	})
 
 	validCount := 0
 	for _, l := range strings.Split(string(inFile), "\n\n") {
