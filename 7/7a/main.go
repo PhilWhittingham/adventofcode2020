@@ -7,23 +7,28 @@ import (
 	"strings"
 )
 
-func checkContains(bagStr string, inFile string) int {
-	containsCount := 0
-	for _, l := range strings.Split(string(inFile), "\n") {
+func checkContains(bagStr string, inFile string) []int {
+	containsIndexList := []int{}
+	for i, l := range strings.Split(string(inFile), "\n") {
 		containsList := strings.Split(l, "bags contain")
 		if strings.Contains(containsList[1], bagStr) {
-			containsCount += 1 + checkContains(containsList[0], inFile)
+			containsIndexList = append(containsIndexList, i)
+			containsIndexList = append(containsIndexList, checkContains(containsList[0], inFile)...)
 		}
 	}
-	return containsCount
+	return containsIndexList
 }
 
 func main() {
-	inFile, err := ioutil.ReadFile("../input2")
+	inFile, err := ioutil.ReadFile("../input")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	bagStr := "shiny gold"
-	fmt.Println(checkContains(bagStr, string(inFile)))
+	counter := make(map[int]int)
+	for _, val := range checkContains(bagStr, string(inFile)) {
+		counter[val]++
+	}
+	fmt.Println(len(counter))
 }
